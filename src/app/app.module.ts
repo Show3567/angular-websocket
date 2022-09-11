@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 
@@ -12,7 +13,12 @@ const config: SocketIoConfig = {
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [BrowserModule, AppRoutingModule, SocketIoModule.forRoot(config)],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule,
+    SocketIoModule.forRoot(config),
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
