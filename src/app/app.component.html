@@ -2,4 +2,4 @@
   <li *ngFor="let msg of msglist">{{ msg }}</li>
 </ul>
 
-<input type="text" [(ngModel)]="inputmsg" />
+<input type="text" [(ngModel)]="inputmsg" (change)="sendmsg()" />

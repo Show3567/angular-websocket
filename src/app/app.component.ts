@@ -18,4 +18,8 @@ export class AppComponent implements OnInit {
       this.msglist.push(msg);
     });
   }
+
+  sendmsg() {
+    this.socketService.sendMessage(this.inputmsg);
+  }
 }
