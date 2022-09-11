@@ -5,6 +5,7 @@ import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ChatComponent } from './chat/chat.component';
 
 const config: SocketIoConfig = {
   url: 'http://localhost:4232',
@@ -12,7 +13,7 @@ const config: SocketIoConfig = {
 };
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, ChatComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

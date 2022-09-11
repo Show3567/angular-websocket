@@ -1,9 +1,19 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, EMPTY, Subject } from 'rxjs';
+import { catchError, switchAll, tap } from 'rxjs/operators';
+import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SocketService {
+  private socket$: WebSocketSubject<any> = webSocket('ws://localhost:4232');
+  socketBroadcastor$ = this.socket$.asObservable();
 
-  constructor() { }
+  sendMessage(msg: any) {
+    this.socket$.next(msg);
+  }
+  close() {
+    this.socket$.complete();
+  }
 }
