@@ -1,21 +1,51 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, EMPTY, Subject } from 'rxjs';
-import { catchError, switchAll, tap } from 'rxjs/operators';
-import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
+import { Socket } from 'ngx-socket-io';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SocketService {
-  private socket$: WebSocketSubject<any> = webSocket(
-    'ws://localhost:4232/socket.io/?EIO=3&transport=websocket'
-  );
-  socketBroadcastor$ = this.socket$.asObservable();
+  currentDocument = this.socket.fromEvent<Document>('document');
+  documents = this.socket.fromEvent<string[]>('documents');
 
-  sendMessage(msg: any) {
-    this.socket$.next(msg);
+  constructor(private socket: Socket) {}
+
+  getDocument(id: string) {
+    this.socket.emit('getDoc', id);
   }
-  close() {
-    this.socket$.complete();
+
+  newDocument() {
+    this.socket.emit('addDoc', { id: this.docId(), doc: '' });
   }
+
+  editDocument(document: Document) {
+    this.socket.emit('editDoc', document);
+  }
+
+  private docId() {
+    let text = '';
+    const possible =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 5; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+  }
+
+  // private socket$: WebSocketSubject<any> = webSocket(
+  //   'ws://localhost:4232/socket.io/?EIO=3&transport=websocket'
+  // );
+  // socketBroadcastor$ = this.socket$.asObservable();
+
+  // sendMessage(msg: any) {
+  //   this.socket$.next(msg);
+  // }
+  // close() {
+  //   this.socket$.complete();
+  // }
+}
+
+export interface Document {
+  id: string;
+  doc: string;
 }
