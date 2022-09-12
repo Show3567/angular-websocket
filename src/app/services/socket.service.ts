@@ -7,7 +7,9 @@ import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
   providedIn: 'root',
 })
 export class SocketService {
-  private socket$: WebSocketSubject<any> = webSocket('ws://localhost:4232');
+  private socket$: WebSocketSubject<any> = webSocket(
+    'ws://localhost:4232/socket.io/?EIO=3&transport=websocket'
+  );
   socketBroadcastor$ = this.socket$.asObservable();
 
   sendMessage(msg: any) {
