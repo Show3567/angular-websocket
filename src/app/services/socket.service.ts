@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { Socket, io } from 'socket.io-client';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SocketService {
-  private socket!: Socket;
-  private readonly messages$ = new Subject<string>();
+  private socket: Socket = io('http://localhost:4231');
+  private messages$ = new BehaviorSubject<string>('');
 
   get messages() {
     return this.messages$.asObservable();
@@ -16,7 +16,6 @@ export class SocketService {
   constructor() {}
 
   setupSocketConnection() {
-    this.socket = io('http://localhost:4231');
     this.socket.on('msgToServer', (msg: string) => {
       this.messages$.next(msg);
     });
