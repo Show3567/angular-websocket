@@ -25,5 +25,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   sendmsg() {
     this.socketService.emitMessage(this.inputmsg);
+    this.inputmsg = '';
   }
 }

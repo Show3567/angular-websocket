@@ -1,19 +1,20 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { Socket, io } from 'socket.io-client';
+import { SOCKRT_PATH } from '../app.module';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SocketService {
-  private socket: Socket = io('http://localhost:4231');
+  private socket: Socket = io(this.socketPath);
   private messages$ = new BehaviorSubject<string>('');
 
   get messages() {
     return this.messages$.asObservable();
   }
 
-  constructor() {}
+  constructor(@Inject(SOCKRT_PATH) private socketPath: string) {}
 
   setupSocketConnection() {
     this.socket.on('msgToServer', (msg: string) => {
@@ -22,6 +23,7 @@ export class SocketService {
   }
 
   emitMessage(msg: string) {
+    console.log(msg);
     this.socket.emit('msgToServer', msg);
   }
 
