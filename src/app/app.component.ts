@@ -17,9 +17,6 @@ export class AppComponent implements OnInit {
     this.socketService.messages.subscribe((msg: string) => {
       this.msglist.push(msg);
     });
-    // this.socketService.messages.subscribe((msg: string) => {
-    //   this.msglist.push(msg);
-    // });
   }
 
   sendmsg() {
