@@ -1,48 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Socket } from 'ngx-socket-io';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SocketService {
-  currentDocument = this.socket.fromEvent<Document>('document');
-  documents = this.socket.fromEvent<string[]>('documents');
+  private socket = new WebSocket('ws://localhost:3001');
+  private messages$ = new Subject<string>();
 
-  constructor(private socket: Socket) {}
-
-  getDocument(id: string) {
-    this.socket.emit('getDoc', id);
+  get messages() {
+    return this.messages$.asObservable();
   }
 
-  newDocument() {
-    this.socket.emit('addDoc', { id: this.docId(), doc: '' });
+  constructor() {
+    this.socket.onmessage = (event) => {
+      this.messages$.next(event.data);
+    };
+    this.socket.onerror = (error) => {
+      console.log(`WebSocket Error: `, error);
+    };
   }
 
-  editDocument(document: Document) {
-    this.socket.emit('editDoc', document);
+  sendMessage(message: string): void {
+    const data = {
+      event: 'msgToServer',
+      data: message,
+    };
+    this.socket.send(JSON.stringify(data));
   }
-
-  private docId() {
-    let text = '';
-    const possible =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (let i = 0; i < 5; i++) {
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return text;
-  }
-
-  // private socket$: WebSocketSubject<any> = webSocket(
-  //   'ws://localhost:4232/socket.io/?EIO=3&transport=websocket'
-  // );
-  // socketBroadcastor$ = this.socket$.asObservable();
-
-  // sendMessage(msg: any) {
-  //   this.socket$.next(msg);
-  // }
-  // close() {
-  //   this.socket$.complete();
-  // }
 }
 
 export interface Document {
