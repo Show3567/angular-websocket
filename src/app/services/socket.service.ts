@@ -1,38 +1,34 @@
 import { Injectable } from '@angular/core';
-import { Subject, tap } from 'rxjs';
-import { webSocket } from 'rxjs/webSocket';
+import { Subject } from 'rxjs';
+import { Socket, io } from 'socket.io-client';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SocketService {
-  // private socket = new WebSocket('ws://localhost:3001');
-  socket = webSocket('ws://localhost:3001');
-  // private messages$ = new Subject<string>();
+  private socket!: Socket;
+  private readonly messages$ = new Subject<string>();
 
-  // get messages() {
-  //   return this.messages$.asObservable();
-  // }
-
-  constructor() {
-    // this.socket.pipe(
-    //   tap((msg) => {
-    //     console.log(msg);
-    //   })
-    // );
-    // this.socket.onmessage = (event) => {
-    //   this.messages$.next(event.data);
-    // };
-    // this.socket.onerror = (error) => {
-    //   console.log(`WebSocket Error: `, error);
-    // };
+  get messages() {
+    return this.messages$.asObservable();
   }
 
-  sendMessage(message: string): void {
-    // const data = {
-    //   event: 'msgToServer',
-    //   data: message,
-    // };
-    // this.socket.next(JSON.stringify(data));
+  constructor() {}
+
+  setupSocketConnection() {
+    this.socket = io('http://localhost:4231');
+    this.socket.on('msgToServer', (msg: string) => {
+      this.messages$.next(msg);
+    });
+  }
+
+  emitMessage(msg: string) {
+    this.socket.emit('msgToServer', msg);
+  }
+
+  disconnect() {
+    if (this.socket) {
+      this.socket.disconnect();
+    }
   }
 }

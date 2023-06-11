@@ -14,13 +14,15 @@ export class AppComponent implements OnInit {
   constructor(private readonly socketService: SocketService) {}
 
   ngOnInit(): void {
-    this.socketService.socket.subscribe();
+    this.socketService.messages.subscribe((msg: string) => {
+      this.msglist.push(msg);
+    });
     // this.socketService.messages.subscribe((msg: string) => {
     //   this.msglist.push(msg);
     // });
   }
 
   sendmsg() {
-    // this.socketService.sendMessage(this.inputmsg);
+    this.socketService.emitMessage(this.inputmsg);
   }
 }
