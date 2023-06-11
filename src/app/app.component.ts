@@ -16,14 +16,16 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.socketService.setupSocketConnection();
     this.socketService.messages.subscribe((msg: string) => {
-      this.msglist.push(msg);
+      if (!this.msglist.includes(msg)) {
+        this.msglist.push(msg);
+      }
     });
   }
   ngOnDestroy(): void {
     this.socketService.disconnect();
   }
 
-  sendmsg() {
+  sendmsg(): void {
     this.socketService.emitMessage(this.inputmsg);
     this.inputmsg = '';
   }

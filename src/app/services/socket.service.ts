@@ -23,7 +23,6 @@ export class SocketService {
   }
 
   emitMessage(msg: string) {
-    console.log(msg);
     this.socket.emit('msgToServer', msg);
   }
 
