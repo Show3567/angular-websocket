@@ -8,13 +8,13 @@ import { SocketService } from './services/socket.service';
 })
 export class AppComponent implements OnInit {
   title = 'angular-websocket';
-  msglist: any = [];
+  msglist: string[] = [];
   inputmsg = '';
 
   constructor(private readonly socketService: SocketService) {}
 
   ngOnInit(): void {
-    this.socketService.socketBroadcastor$.subscribe((msg: any) => {
+    this.socketService.messages.subscribe((msg: string) => {
       this.msglist.push(msg);
     });
   }
