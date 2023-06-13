@@ -19,3 +19,6 @@ export const SOCKRT_PATH = new InjectionToken<string>('');
   bootstrap: [AppComponent],
 })
 export class AppModule {}
+/* 
+  microservices-sub: ---> socket.io backend
+*/
