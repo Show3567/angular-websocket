@@ -15,6 +15,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.socketService.setupSocketConnection();
+
     this.socketService.messages.subscribe((msg: string) => {
       if (!this.msglist.includes(msg) && msg.trim() !== '') {
         this.msglist.push(msg);
