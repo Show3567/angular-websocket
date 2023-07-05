@@ -10,6 +10,8 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'angular-websocket';
   msglist: string[] = [];
   inputmsg = '';
+  private timer!: ReturnType<typeof performance.now>;
+  timercost = '';
 
   constructor(private readonly socketService: SocketService) {}
 
@@ -20,14 +22,15 @@ export class AppComponent implements OnInit, OnDestroy {
       if (!this.msglist.includes(msg) && msg.trim() !== '') {
         this.msglist.push(msg);
       }
+      this.timercost = (performance.now() - this.timer).toFixed(3);
     });
   }
   ngOnDestroy(): void {
     this.socketService.disconnect();
   }
-
   sendmsg(): void {
     this.socketService.emitMessage(this.inputmsg);
+    this.timer = performance.now();
     this.inputmsg = '';
   }
 }
