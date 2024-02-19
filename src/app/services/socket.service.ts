@@ -9,7 +9,7 @@ import { SOCKRT_PATH } from '../app.module';
 export class SocketService {
   private socketPath = inject<string>(SOCKRT_PATH);
   private socket: Socket = io(this.socketPath, {
-    path: '/socket/socket.io',
+    path: '/socket/socket.io', // * set the websocket path;
     transports: ['websocket', 'polling'],
   });
   private messages$ = new BehaviorSubject<string>('');
