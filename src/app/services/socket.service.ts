@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Socket, io } from 'socket.io-client';
 import { SOCKRT_PATH } from '../app.module';
 
