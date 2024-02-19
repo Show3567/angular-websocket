@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Inject, Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Socket, io } from 'socket.io-client';
 import { SOCKRT_PATH } from '../app.module';
@@ -7,14 +7,16 @@ import { SOCKRT_PATH } from '../app.module';
   providedIn: 'root',
 })
 export class SocketService {
-  private socket: Socket = io(this.socketPath);
+  private socketPath = inject<string>(SOCKRT_PATH);
+  private socket: Socket = io(this.socketPath, {
+    path: '/socket/socket.io',
+    transports: ['websocket', 'polling'],
+  });
   private messages$ = new BehaviorSubject<string>('');
 
   get messages() {
     return this.messages$.asObservable();
   }
-
-  constructor(@Inject(SOCKRT_PATH) private socketPath: string) {}
 
   setupSocketConnection() {
     this.socket.on('msgToServer', (msg: string) => {

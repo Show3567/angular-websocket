@@ -28,6 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.socketService.disconnect();
   }
+
   sendmsg(): void {
     this.socketService.emitMessage(this.inputmsg);
     this.timer = performance.now();
